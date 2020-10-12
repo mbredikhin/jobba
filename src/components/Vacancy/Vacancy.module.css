@@ -1,0 +1,22 @@
+.button {
+  color: #1e86ff;
+  font-family: Poppins;
+  font-weight: 500;
+  font-size: 14px;
+  border: none;
+  background: none;
+}
+
+.vacancy-main {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.column {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+/* .column--small {
+  max-width: 375px;
+} */

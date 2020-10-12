@@ -1,0 +1,76 @@
+.app-title {
+  font-family: "Poppins", sans-serif;
+}
+
+.app-title_regular {
+  font-weight: 400;
+}
+
+.main-section {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.controls {
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 1rem 0;
+}
+
+.header {
+  font-family: "Poppins", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #b9bdcf;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+}
+
+.controls__label {
+  display: inline-block;
+  line-height: 2;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  color: #334680;
+}
+
+.controls__input {
+  font-family: "Roboto", sans-serif;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 2px;
+  margin-right: 0.25rem;
+  font-size: 0.75rem;
+  box-shadow: 1px 1px 3px #dcdfec;
+  margin: 0.5rem 0;
+}
+
+.vacancies {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 2vh 10vw;
+  }
+
+  .app-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .main-section {
+    flex-flow: row nowrap;
+  }
+
+  .controls {
+    width: 30%;
+  }
+
+  .vacancies {
+    width: 70%;
+    padding: 1rem 0 2rem 2rem;
+  }
+}
