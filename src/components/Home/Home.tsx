@@ -1,178 +1,131 @@
-import React from "react";
+import React, { useState, FunctionComponent, ReactFragment } from "react";
+import { RouteComponentProps, useHistory, withRouter } from "react-router-dom";
 import styles from "./Home.module.css";
 import SearchBar from "../SearchBar";
 import VacancyCard from "../VacancyCard";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Vacancy, getVacancyParams } from "../../types";
+import api from "../../Api";
 
-interface HomeState {
-  vacancies: Array<Vacancy>;
-  location: string;
-  fullTime: boolean;
-  imagePlaceholder: string;
-  cities: Cities;
-  redirect: boolean;
-  redirectId: string;
-}
-
-interface Cities {
-  london: boolean;
-  amsterdam: boolean;
-  "new+york": boolean;
-  berlin: boolean;
-}
-
-interface Vacancy {
-  id: string;
-  type: string;
-  url: string;
-  created_at: string;
-  company: string;
-  company_url: string;
-  location: string;
+interface City {
+  name: string;
   title: string;
-  description: string;
+  selected: boolean;
 }
 
-class Home extends React.Component<RouteComponentProps, HomeState> {
-  state = {
-    vacancies: [],
-    location: "",
-    fullTime: false,
-    cities: {
-      london: false,
-      amsterdam: false,
-      "new+york": false,
-      berlin: false,
+const Home: FunctionComponent<RouteComponentProps> = (props) => {
+  const history = useHistory();
+  const [vacancies, setVacancies] = useState<Vacancy[]>([]);
+  const [location, setLocation] = useState("");
+  const [fullTime, setFullTime] = useState(false);
+  const [cities, setCities] = useState([
+    {
+      name: "london",
+      title: "London",
+      selected: false,
     },
-    imagePlaceholder:
-      "https://via.placeholder.com/250x250?text=Image+not+found",
-    redirect: false,
-    redirectId: "",
-  };
+    {
+      name: "amsterdam",
+      title: "Amsterdam",
+      selected: false,
+    },
+    {
+      name: "new york",
+      title: "New York",
+      selected: false,
+    },
+    {
+      name: "berlin",
+      title: "Berlin",
+      selected: false,
+    },
+  ]);
+  const [redirect, setRedirect] = useState(false);
+  const [redirectId, setRedirectId] = useState("");
 
-  fetchData = (url: string): Promise<Array<Vacancy>> =>
-    fetch(url).then((response) => response.json());
-
-  getURL = (query: string): URL => {
-    const { location, fullTime } = this.state;
-    const url = new URL(
-      "https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json"
+  const getVacancies = async (search: string): Promise<void> => {
+    const selectedCities: string[] = cities.reduce(
+      (acc: string[], city: City) =>
+        city.selected ? [...acc, city.name] : acc,
+      []
     );
-    if (location.length) {
-      url.searchParams.append("location", location);
-    } else {
-      Object.entries(this.state.cities).forEach(([city, checked]) =>
-        checked ? url.searchParams.append("location", city) : null
-      );
+    const params: getVacancyParams = {
+      ...(location.length && { location }),
+      cities: selectedCities,
+      full_time: fullTime,
+      search,
+    };
+    try {
+      const vacancies: Vacancy[] = await api.getVacancies(params);
+      setVacancies(vacancies);
+    } catch (error) {
+      console.log("Something went wrong 😔\n", error);
     }
-    fullTime && url.searchParams.append("full_time", "true");
-    url.searchParams.append("search", query);
-    return url;
   };
 
-  search = (query: string) => {
-    const url: URL = this.getURL(query);
-    this.fetchData(url.href)
-      .then((vacancies) => this.setState({ vacancies }))
-      .catch((error) => console.log("Something went wrong 😔\n", error));
-  };
-
-  onCardClick = (id: string) => {
-    const [vacancyProps] = this.state.vacancies.filter(
+  const openVacancy = (id: string): void => {
+    const vacancy: Vacancy[] = vacancies.filter(
       (vacancy: Vacancy) => vacancy.id === id
     );
-    this.props.history.push({ pathname: "/vacancy", state: vacancyProps });
+    history.push({ pathname: "/vacancy", state: vacancy });
   };
 
-  changeCity = (city: keyof Cities) => {
-    this.setState((state) => ({
-      cities: { ...state.cities, [city]: !state.cities[city] },
-    }));
-  };
-
-  render() {
-    return (
-      <div className={styles.container}>
-        <h1 className={styles["app-title"]}>
-          Github <span className={styles["app-title_regular"]}>Jobs</span>
-        </h1>
-        <SearchBar search={this.search} />
-        <main className={styles["main-section"]}>
-          <div className={styles.controls}>
-            <label htmlFor="full-time" className={styles["controls__label"]}>
-              <input
-                type="checkbox"
-                id="full-time"
-                onChange={() =>
-                  this.setState((state) => ({
-                    fullTime: !state.fullTime,
-                  }))
-                }
-              />
-              Full Time
-            </label>
-            <span className={styles.header}>Location</span>
+  return (
+    <div className={styles.container}>
+      <h1 className={styles["app-title"]}>
+        Github <span className={styles["app-title_regular"]}>Jobs</span>
+      </h1>
+      <SearchBar search={getVacancies} />
+      <main className={styles["main-section"]}>
+        <div className={styles.controls}>
+          <label htmlFor="full-time" className={styles["controls__label"]}>
             <input
-              type="text"
-              className={styles["controls__input"]}
-              placeholder="City, state, zip code or country"
-              onChange={(event) =>
-                this.setState({ location: event.target.value })
-              }
+              type="checkbox"
+              id="full-time"
+              onChange={() => setFullTime((fullTime) => !fullTime)}
             />
-            <label htmlFor="london" className={styles["controls__label"]}>
+            Full Time
+          </label>
+          <span className={styles.header}>Location</span>
+          <input
+            type="text"
+            className={styles["controls__input"]}
+            placeholder="City, state, zip code or country"
+            onChange={(e) => setLocation(e.target.value)}
+          />
+          {cities.map(({ name, title, selected }) => (
+            <label htmlFor={name} className={styles["controls__label"]}>
               <input
                 type="checkbox"
-                id="london"
-                onChange={() => this.changeCity("london")}
-              />
-              London
+                id={name}
+                onChange={() =>
+                  setCities((cities) => [
+                    ...cities.filter((city) => city.name !== name),
+                    { name, title, selected },
+                  ])
+                }
+              ></input>
+              {title}
             </label>
-            <label htmlFor="amsterdam" className={styles["controls__label"]}>
-              <input
-                type="checkbox"
-                id="amsterdam"
-                onChange={() => this.changeCity("amsterdam")}
-              />
-              Amsterdam
-            </label>
-            <label htmlFor="new-york" className={styles["controls__label"]}>
-              <input
-                type="checkbox"
-                id="new-york"
-                onChange={() => this.changeCity("new+york")}
-              />
-              New York
-            </label>
-            <label htmlFor="berlin" className={styles["controls__label"]}>
-              <input
-                type="checkbox"
-                id="berlin"
-                onChange={() => this.changeCity("berlin")}
-              />
-              Berlin
-            </label>
-          </div>
+          ))}
+        </div>
 
-          <ul className="vacancies">
-            {this.state.vacancies.map(
-              ({ id, company, company_logo, created_at, location, title }) => (
-                <VacancyCard
-                  key={id}
-                  company={company}
-                  company_logo={company_logo || this.state.imagePlaceholder}
-                  created_at={created_at}
-                  location={location}
-                  title={title}
-                  onclick={() => this.onCardClick(id)}
-                />
-              )
-            )}
-          </ul>
-        </main>
-      </div>
-    );
-  }
-}
+        <ul className="vacancies">
+          {/* company_logo={vacancy.company_logo} */}
+          {vacancies.map(
+            (vacancy: Vacancy) => 
+              <VacancyCard
+                key={vacancy.id}
+                company={vacancy.company}
+                created_at={vacancy.created_at}
+                location={vacancy.location}
+                title={vacancy.title}
+                openVacancy={() => openVacancy(vacancy.id)}
+              />
+          )}
+        </ul>
+      </main>
+    </div>
+  );
+};
 
 export default withRouter(Home);

@@ -9,11 +9,11 @@ const convertDate = (dateString: string): number => {
 };
 
 const debounce = (
-  cb: (...args: any[]) => void,
+  callback: (...args: any[]) => void,
   ms: number,
   ...args: any[]
 ): void => {
-  let timerID: number = window.setTimeout(cb, ms, ...args);
+  let timerID: number = window.setTimeout(callback, ms, ...args);
   while (--timerID) {
     window.clearTimeout(timerID);
   }
