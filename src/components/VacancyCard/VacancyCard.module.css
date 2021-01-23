@@ -1,60 +1,64 @@
 .card {
   display: flex;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
+  padding: .5rem;
+  margin: .75rem 0;
   background: white;
-  border-radius: 4px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.15);
 }
 
 .card:hover {
   cursor: pointer;
 }
 
-.image {
-  width: 85px;
-  padding: 0.25rem;
+.image-container {
+  height: 8rem;
+  width: 8rem;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
 }
 
 .card__image {
   display: inline-block;
-  width: 100%;
+  max-width: 8rem;
+  max-height: 100%;
 }
 
 .content {
-  padding: 0.25rem 0 0 0.5rem;
+  padding: 0.5rem;
   width: 75%;
   display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-between;
+  flex-direction: column;
+justify-content: space-around;
   font-family: 'Roboto', sans-serif;
 }
 
 .card__company {
   font-weight: bold;
-  font-size: 12px;
-  line-height: 14px;
+  font-size: .85rem;
+  line-height: 1.25rem;
   color: #334680;
 }
 
 .card__title {
-  font-size: 16px;
-  line-height: 19px;
+  font-size: 1.25rem;
+  line-height: 2rem;
   color: #334680;
   padding: 0.2rem 0;
 }
 
 .card__badge {
-  display: inline-block;
   text-align: center;
+  height: 1.25rem;
   max-width: 4rem;
-  padding: 0.25rem;
-  font-size: 12px;
+  line-height: 1.25rem;
+  padding: 0.25rem 0.5rem;
+  font-size: .85rem;
   color: #334680;
-  font-weight: 500;
+  font-weight: 600;
   border: 1px solid #334680;
   border-radius: 4px;
-  margin: 0.5rem 0;
 }
 
 .card__location {
@@ -63,26 +67,36 @@
   border-radius: 4px;
 }
 
-.footer {
+.content-header {
   display: flex;
-  flex-flow: column nowrap;
+  flex-direction: column;
   justify-content: space-between;
 }
 
+.content-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: .25rem;
+}
+
 .card__extra {
-  display: inline-flex;
-  margin-right: 0.5rem;
-  font-size: 12px;
-  color: #b7bcce;
+  display: flex;
+  align-items: center;
+  margin: 0 0.25rem;
 }
 
 .card__extra-text {
-  line-height: 2;
+  line-height: 1.75;
+  color: #b7bcce;
+  font-size: 1rem;
 }
 
 .card__icon {
-  width: 18px;
-  margin-right: 0.25rem;
+  display: inline-block;
+  width: 1rem;
+  margin: 0 0.5rem;
 }
 
 @media (min-width: 768px) {

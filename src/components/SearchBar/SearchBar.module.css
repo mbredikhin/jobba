@@ -2,7 +2,8 @@
 .search {
   background: url('../../assets/skyscrapers.png') center / cover no-repeat;
   padding: 2.5rem 1rem;
-  border-radius: 6px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 8px #c3c5ce;
 }
 
 .search-bar {
@@ -10,7 +11,7 @@
   justify-content: space-between;
   padding: 0.25rem;
   background: white;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .search-bar__input {
@@ -18,21 +19,31 @@
   width: 100%;
   padding: 0.5rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   margin-right: 0.25rem;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   text-overflow: ellipsis;
 }
 
 .search-bar__submit {
-  padding: 0.75rem 1.5rem;
+  padding: 0rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: #4e86ff;
-  border: none;
-  border-radius: 4px;
+  border: 1px solid #3a78ff;
+  border-radius: 6px;
   color: white;
   font-family: 'Roboto', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.search-bar__submit:disabled {
+  background: #b6bcc9;
+  border: 1px solid #abb0b9;
+  cursor: auto;
 }
 
 @media (min-width: 768px) {

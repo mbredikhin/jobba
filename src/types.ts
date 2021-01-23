@@ -8,12 +8,14 @@ export interface Vacancy {
   location: string;
   title: string;
   description: string;
+  how_to_apply: string;
+  company_logo: string;
 }
 
 export interface getVacancyParams {
-  location?: string,
-  full_time: boolean,
-  search?: string,
-  cities?: string[],
-  description?: string,
+  location?: string;
+  full_time: boolean;
+  search?: string;
+  cities?: string[];
+  description?: string;
 }

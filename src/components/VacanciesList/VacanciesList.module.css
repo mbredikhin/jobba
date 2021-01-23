@@ -1,0 +1,20 @@
+.vacancies {
+  display: flex;
+  flex-flow: column;
+}
+
+.no-results {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #9798a3;
+  text-align: center;
+  padding-top: 6rem;
+}
+
+@media (min-width: 768px) {
+  .vacancies {
+    width: 80%;
+    padding: 1rem;
+  }
+}

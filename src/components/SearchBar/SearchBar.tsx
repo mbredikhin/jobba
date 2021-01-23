@@ -1,12 +1,14 @@
-import React, { FunctionComponent, ChangeEvent, useState } from "react";
-import styles from "./SearchBar.module.css";
+import React, { FC, ChangeEvent, useState } from 'react';
+import styles from './SearchBar.module.css';
+import Loader from 'react-loader-spinner';
 
 interface Props {
   search: (query: string) => void;
+  isLoading: boolean;
 }
 
-const SearchBar: FunctionComponent<Props> = ({ search }) => {
-  const [query, setQuery] = useState("");
+const SearchBar: FC<Props> = ({ search, isLoading }: Props) => {
+  const [query, setQuery] = useState('');
 
   const inputHandle = (event: ChangeEvent<HTMLInputElement>): void => {
     event.persist();
@@ -16,19 +18,24 @@ const SearchBar: FunctionComponent<Props> = ({ search }) => {
 
   return (
     <div className={styles.search}>
-      <div className={styles["search-bar"]}>
+      <div className={styles['search-bar']}>
         <input
           type="search"
-          className={styles["search-bar__input"]}
+          className={styles['search-bar__input']}
           placeholder="Title, companies, expertise or benefits"
           onChange={inputHandle}
+          onKeyUp={(e) => {
+            e.key === 'Enter' && search(query);
+          }}
         />
-        <input
-          type="submit"
+        <button
           value="Search"
-          className={styles["search-bar__submit"]}
+          className={styles['search-bar__submit']}
           onClick={() => search(query)}
-        />
+          disabled={isLoading || !query.length}
+        >
+          {isLoading ? <Loader type="Oval" color="#fff" height="20" width="50" /> : <span>Search</span>}
+        </button>
       </div>
     </div>
   );

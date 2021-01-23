@@ -1,9 +1,5 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { Vacancy, getVacancyParams } from "./types";
-
-declare module "axios" {
-  interface AxiosResponse<T = any> extends Promise<T> {}
-}
+import axios, { AxiosInstance } from 'axios';
+import { Vacancy, getVacancyParams } from './types';
 
 class Api {
   protected readonly instance: AxiosInstance;
@@ -13,12 +9,17 @@ class Api {
   }
 
   public getVacancies = (params: getVacancyParams) =>
-    this.instance.get<Vacancy[]>("/positions.json", { params });
+    this.instance
+      .get<Vacancy[]>('/positions.json', { params })
+      .then(({ data }) => data);
 
   public getVacancy = (id: string) =>
-    this.instance.get<Vacancy>("/positions.json");
+    this.instance
+      .get<Vacancy>('/positions.json', { params: { id } })
+      .then(({ data }) => data);
 }
 
-const api = new Api("https://cors-anywhere.herokuapp.com/https://jobs.github.com");
+const baseURL = 'https://cors-anywhere.herokuapp.com/https://jobs.github.com';
+const api = new Api(baseURL);
 
 export default api;
